@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sample Signup</title>
+</head>
+<body>
+  <h1>Create an account</h1>
+  <form id="signup-form" novalidate>
+    <p><label for="name">Name</label><br><input id="name" type="text"></p>
+    <p><label for="email">Email</label><br><input id="email" type="email"></p>
+    <p><label for="password">Password</label><br><input id="password" type="password"></p>
+    <p><label for="confirm">Confirm password</label><br><input id="confirm" type="password"></p>
+    <p><label><input id="terms" type="checkbox"> I accept the terms</label></p>
+    <button type="submit">Sign up</button>
+  </form>
+  <p id="error" role="alert" style="color:#b00020"></p>
+  <p id="success" role="status" style="color:#0a7d27"></p>
+
+  <script>
+    document.getElementById('signup-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var name = document.getElementById('name').value.trim();
+      var email = document.getElementById('email').value.trim();
+      var password = document.getElementById('password').value;
+      var confirm = document.getElementById('confirm').value;
+      var terms = document.getElementById('terms').checked;
+      var error = document.getElementById('error');
+      var success = document.getElementById('success');
+      error.textContent = '';
+      success.textContent = '';
+
+      if (!name || !email || !password || !confirm) {
+        error.textContent = 'All fields are required';
+      } else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+        error.textContent = 'Enter a valid email address';
+      } else if (password.length < 8) {
+        error.textContent = 'Password must be at least 8 characters';
+      } else if (password !== confirm) {
+        error.textContent = 'Passwords do not match';
+      } else if (!terms) {
+        error.textContent = 'You must accept the terms';
+      } else {
+        success.textContent = 'Account created successfully';
+      }
+    });
+  </script>
+</body>
+</html>
