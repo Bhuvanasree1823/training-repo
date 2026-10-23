@@ -55,6 +55,39 @@ describe('Signup form (Selenium)', function () {
     assert.strictEqual(await driver.findElement(By.id('error')).getText(), '');
   });
 
+  // SU-03: invalid email format
+  it('SU-03 invalid email shows an error', async function () {
+    await fillAndSubmit({
+      name: 'Test User',
+      email: 'user@',
+      password: 'Password123',
+      confirm: 'Password123',
+      terms: true,
+    });
+    assert.strictEqual(await waitForText('error'), 'Enter a valid email address');
+    assert.strictEqual(await driver.findElement(By.id('success')).getText(), '');
+  });
+
+  // SU-04: empty required fields
+  it('SU-04 empty form shows a required-field error', async function () {
+    await driver.findElement(By.css('button[type="submit"]')).click();
+    assert.strictEqual(await waitForText('error'), 'All fields are required');
+    assert.strictEqual(await driver.findElement(By.id('success')).getText(), '');
+  });
+
+  // SU-05: password below minimum length
+  it('SU-05 short password shows an error', async function () {
+    await fillAndSubmit({
+      name: 'Test User',
+      email: 'test.user@example.com',
+      password: 'Short12',
+      confirm: 'Short12',
+      terms: true,
+    });
+    assert.strictEqual(await waitForText('error'), 'Password must be at least 8 characters');
+    assert.strictEqual(await driver.findElement(By.id('success')).getText(), '');
+  });
+
   // SU-07: passwords do not match
   it('SU-07 mismatched passwords show an error', async function () {
     await fillAndSubmit({
